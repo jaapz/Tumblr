@@ -1,7 +1,7 @@
 Tumblr
 ======
 
-A simple to use Tumblr API wrapper for PHP.
+A simple to use Tumblr API wrapper for PHP. This uses the Tumblr API v2.
 
 Usage
 =====

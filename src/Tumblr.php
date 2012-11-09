@@ -22,86 +22,86 @@ class Tumblr
 	protected $host = 'http://api.tumblr.com/v2';
 
 	protected $methods = array(
-        'info' => array(
-        	'uri' => '/blog/%s/info',
-        	'auth' => 'api_key',
-        	'method' => 'get'
-        ),
-        'followers' => array(
-        	'uri' => '/blog/%s/followers',
-        	'auth' => 'oauth',
-        	'method' => 'get'
-        ),
-        'posts' => array(
-        	'uri' => '/blog/%s/posts',
-        	'auth' => 'api_key',
-        	'method' => 'get'
-        ),
-        'queue' => array(
-        	'uri' => '/blog/%s/posts/queue',
-        	'auth' => 'oauth',
-        	'method' => 'get'
-        ),
-        'drafts' => array(
-        	'uri' => '/blog/%s/posts/draft',
-        	'auth' => 'oauth',
-        	'method' => 'get'
-        ),
-        'submissions' => array(
-        	'uri' => '/blog/%s/posts/submission',
-        	'auth' => 'oauth',
-        	'method' => 'get'
-        ),
-        'create_post' => array(
-        	'uri' => '/blog/%s/post',
-        	'auth' => 'oauth',
-        	'method' => 'post'
-        ),
-        'edit_post' => array(
-        	'uri' => '/blog/%s/post/edit',
-        	'auth' => 'oauth',
-        	'method' => 'post'
-        ),
-        'reblog_post' => array(
-        	'uri' => '/blog/%s/post/reblog',
-        	'auth' => 'oauth',
-        	'method' => 'post'
-        ),
-        'delete_post' => array(
-        	'uri' => '/blog/%s/post/delete',
-        	'auth' => 'oauth',
-        	'method' => 'post'
-        ),
-        'dashboard' => array(
-        	'uri' => '/user/dashboard',
-        	'auth' => 'oauth',
-        	'method' => 'get'
-        ),
-        'likes' => array(
-        	'uri' => '/user/likes',
-        	'auth' => 'oauth',
-        	'method' => 'get'
-        ),
-        'following' => array(
-        	'uri' => '/user/following',
-        	'auth' => 'oauth',
-        	'method' => 'get'
-        ),
-        'follow' => array(
-        	'uri' => '/user/follow',
-        	'auth' => 'oauth',
-        	'method' => 'post'
-        ),
-        'unfollow' => array(
-        	'uri' => '/user/unfollow',
-        	'auth' => 'oauth',
-        	'method' => 'get'
-        ),
-        'info_user' => array(
-        	'uri' => '/user/info',
-        	'auth' => 'oauth',
-        	'method' => 'get'
-        )
+		'info' => array(
+			'uri' => '/blog/%s/info',
+			'auth' => 'api_key',
+			'method' => 'get'
+		),
+		'followers' => array(
+			'uri' => '/blog/%s/followers',
+			'auth' => 'oauth',
+			'method' => 'get'
+		),
+		'posts' => array(
+			'uri' => '/blog/%s/posts',
+			'auth' => 'api_key',
+			'method' => 'get'
+		),
+		'queue' => array(
+			'uri' => '/blog/%s/posts/queue',
+			'auth' => 'oauth',
+			'method' => 'get'
+		),
+		'drafts' => array(
+			'uri' => '/blog/%s/posts/draft',
+			'auth' => 'oauth',
+			'method' => 'get'
+		),
+		'submissions' => array(
+			'uri' => '/blog/%s/posts/submission',
+			'auth' => 'oauth',
+			'method' => 'get'
+		),
+		'create_post' => array(
+			'uri' => '/blog/%s/post',
+			'auth' => 'oauth',
+			'method' => 'post'
+		),
+		'edit_post' => array(
+			'uri' => '/blog/%s/post/edit',
+			'auth' => 'oauth',
+			'method' => 'post'
+		),
+		'reblog_post' => array(
+			'uri' => '/blog/%s/post/reblog',
+			'auth' => 'oauth',
+			'method' => 'post'
+		),
+		'delete_post' => array(
+			'uri' => '/blog/%s/post/delete',
+			'auth' => 'oauth',
+			'method' => 'post'
+		),
+		'dashboard' => array(
+			'uri' => '/user/dashboard',
+			'auth' => 'oauth',
+			'method' => 'get'
+		),
+		'likes' => array(
+			'uri' => '/user/likes',
+			'auth' => 'oauth',
+			'method' => 'get'
+		),
+		'following' => array(
+			'uri' => '/user/following',
+			'auth' => 'oauth',
+			'method' => 'get'
+		),
+		'follow' => array(
+			'uri' => '/user/follow',
+			'auth' => 'oauth',
+			'method' => 'post'
+		),
+		'unfollow' => array(
+			'uri' => '/user/unfollow',
+			'auth' => 'oauth',
+			'method' => 'get'
+		),
+		'info_user' => array(
+			'uri' => '/user/info',
+			'auth' => 'oauth',
+			'method' => 'get'
+		)
 	);
 
 	/**

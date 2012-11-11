@@ -6,6 +6,26 @@ A simple to use Tumblr API wrapper for PHP. This uses the Tumblr API v2.
 Usage
 =====
 
+Just instantiate a new API instance, set oauth token and/or api key, and then
+call the method on the API instance.
+
+For example you'll get the information on a certain blog like this:
+
+```php
+// Instantiate a new Tumblr API instance.
+$api = new Tumblr();
+
+// Set API key.
+$api->setApiKey(*** YOUR API KEY ***);
+
+// Get blog information.
+$info = $api->info('jaapz.tumblr.com');
+var_dump($info);
+```
+
+Available methods
+=================
+
 TODO
 
 License

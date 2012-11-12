@@ -19,7 +19,7 @@ $api = new Tumblr();
 $api->setApiKey(*** YOUR API KEY ***);
 
 // Get blog information.
-$info = $api->info('jaapz.tumblr.com');
+$info = $api->blogInfo('jaapz.tumblr.com');
 var_dump($info);
 ```
 

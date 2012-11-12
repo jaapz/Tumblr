@@ -12,6 +12,6 @@ require_once '../src/Tumblr.php';
 $tumblr = new Tumblr();
 $tumblr->setApiKey('pYiJYdRAFJHgQl7ekaVirCiYg8IRiVOp5ONDZ2PziJFXmVEwhv');
 
-$blogInfo = $tumblr->getBlogInfo('jaapz.tumblr.com');
+$blogInfo = $tumblr->blogInfo('jaapz.tumblr.com');
 
 var_dump($blogInfo);

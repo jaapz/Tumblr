@@ -13,7 +13,9 @@
  */
 class TumblrException extends \Exception { }
 
-
+/**
+ * The main API class.
+ */
 class Tumblr
 {
 	protected $apiKey;
@@ -22,7 +24,7 @@ class Tumblr
 	protected $host = 'http://api.tumblr.com/v2';
 
 	protected $methods = array(
-		'info' => array(
+		'blogInfo' => array(
 			'uri' => '/blog/%s/info',
 			'auth' => 'api_key',
 			'method' => 'get'
@@ -52,22 +54,22 @@ class Tumblr
 			'auth' => 'oauth',
 			'method' => 'get'
 		),
-		'create_post' => array(
+		'createPost' => array(
 			'uri' => '/blog/%s/post',
 			'auth' => 'oauth',
 			'method' => 'post'
 		),
-		'edit_post' => array(
+		'editPost' => array(
 			'uri' => '/blog/%s/post/edit',
 			'auth' => 'oauth',
 			'method' => 'post'
 		),
-		'reblog_post' => array(
+		'reblogPost' => array(
 			'uri' => '/blog/%s/post/reblog',
 			'auth' => 'oauth',
 			'method' => 'post'
 		),
-		'delete_post' => array(
+		'deletePost' => array(
 			'uri' => '/blog/%s/post/delete',
 			'auth' => 'oauth',
 			'method' => 'post'
@@ -97,7 +99,7 @@ class Tumblr
 			'auth' => 'oauth',
 			'method' => 'get'
 		),
-		'info_user' => array(
+		'userInfo' => array(
 			'uri' => '/user/info',
 			'auth' => 'oauth',
 			'method' => 'get'
@@ -105,34 +107,35 @@ class Tumblr
 	);
 
 	/**
-	 * Get high level info for a particular blog.
+	 * Catch method calls and sort out the API call that has to be made, then
+	 * return the value or error that was returned by the API. If a method is 
+	 * called that does not exist in the Tumblr API, returns an error.
 	 *
-	 * @param string $baseHostname Name of the blog, for example jaapz.tumblr.com
+	 * @param string $method
+	 * @param array $args
 	 */
-	public function getBlogInfo($baseHostname)
+	public function __call($method, $args)
 	{
-		// Prepare fetch url.
-		$info = $this->getMethodInfo('info');
-		$url = $this->prepareApiKeyUrl($info['uri'], $baseHostname);
-
-		// Get data.
-		$curl = curl_init($url);
-		curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
-		$response = curl_exec($curl);
-		curl_close($curl);
-
-		$responseData = json_decode($response);
-
-		// Check for errors.
-		if (200 !== $responseData->meta->status)
+		// If method does not exist in the API, throw an exception.
+		if (!array_key_exists($method, $this->methods))
 		{
-			throw new TumblrException(
-				$responseData->meta->msg, 
-				$responseData->meta->status
-			); 
+			throw new TumblrException("Unknown method [".$method."]");
 		}
 
-		return json_decode($response);
+		// Get method info.
+		$info = $this->methods[$method];
+
+		// TODO: check for correct arguments.
+
+		// Handle it according to the method.
+		if ('post' === $info['method'])
+		{
+			return $this->handlePostMethod($info, $args);
+		}
+		else
+		{
+			return $this->handleGetMethod($info, $args);
+		}
 	}
 
 	/**
@@ -186,6 +189,52 @@ class Tumblr
 	}
 
 	/**
+	 * Handle a POST method.
+	 *
+	 * @param array $info
+	 * @param array $args
+	 */
+	protected function handlePostMethod($info, $args)
+	{
+		// Handle authentication.
+
+		// Post data to the API, wait for response.
+
+		// Return response.
+	}
+
+	/**
+	 * Handle a GET method.
+	 *
+	 * @param array $info
+	 * @param array $args
+	 */
+	protected function handleGetMethod($info, $args)
+	{
+		// Handle authentication. TODO: handle oauth
+		$url = $this->prepareApiKeyUrl($info['uri'], $args[0]);
+
+		// Get data.
+		$curl = curl_init($url);
+		curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+		$response = curl_exec($curl);
+		curl_close($curl);
+
+		$responseData = json_decode($response);
+
+		// Check for errors.
+		if (200 !== $responseData->meta->status)
+		{
+			throw new TumblrException(
+				$responseData->meta->msg, 
+				$responseData->meta->status
+			); 
+		}
+
+		return json_decode($response);
+	}
+
+	/**
 	 * Get an array with info for a particular API method.
 	 *
 	 * @return array
@@ -219,4 +268,5 @@ class Tumblr
 
 		return $return;
 	}
+
 }

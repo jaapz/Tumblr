@@ -1,7 +1,6 @@
 <?php
 
-/*
- * "THE BEER-WARE LICENSE" (Revision 42):
+/* "THE BEER-WARE LICENSE" (Revision 42):
  * Jaap Broekhuizen <jaapz.b@gmail.com> wrote this file. As long as you retain 
  * this notice you can do whatever you want with this stuff. If we meet some 
  * day, and you think this stuff is worth it, you can buy me a beer in return.
@@ -125,7 +124,24 @@ class Tumblr
 		// Get method info.
 		$info = $this->methods[$method];
 
-		// TODO: check for correct arguments.
+		// If this method needs an argument, check for validness. Only one
+		// argument is accepted, and it should be a string.
+		if (strstr($info['uri'], '%s'))
+		{
+			// Check if there are arguments at all, and check its validness.
+			if (count($args) !== 1 || !is_string($args[0]))
+			{
+				throw new TumblrException("This method only accepts one argument, and it should be a string.");
+			}
+		}
+		else
+		{
+			// Check for arguments.
+			if (count($args) > 0)
+			{
+				throw new TumblrException("This method does not accept arguments.");
+			}
+		}
 
 		// Handle it according to the method.
 		if ('post' === $info['method'])

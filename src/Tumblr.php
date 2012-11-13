@@ -243,7 +243,7 @@ class Tumblr
 	protected function handleGetMethod($info, $args)
 	{
 		// Request the data according to the authentication method.
-		if ('apiKey' === $info['auth'])
+		if ('api_key' === $info['auth'])
 		{
 			$url = $this->prepareApiKeyUrl($info['uri'], $args[0]);
 

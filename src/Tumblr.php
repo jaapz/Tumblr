@@ -18,7 +18,7 @@ class TumblrException extends \Exception { }
 class Tumblr
 {
 	protected $apiKey;
-	protected $oauthToken;
+	protected $oauth;
 	
 	protected $host = 'http://api.tumblr.com/v2';
 
@@ -106,6 +106,20 @@ class Tumblr
 	);
 
 	/**
+	 * You can choose to instantiate this API wrapper by passing an OAuth
+	 * instance and an API key. The OAuth instance should already have both the
+	 * consumer and token keys and secrets.
+	 * 
+	 * @param OAuth $oauth
+	 * @param string $apiKey
+	 */
+	public function __construct($oauth = null, $apiKey = '')
+	{
+		$this->oauth = $oauth;
+		$this->apiKey = $apiKey;
+	}
+
+	/**
 	 * Catch method calls and sort out the API call that has to be made, then
 	 * return the value or error that was returned by the API. If a method is 
 	 * called that does not exist in the Tumblr API, returns an error.
@@ -175,23 +189,24 @@ class Tumblr
 	}
 
 	/**
-	 * Set the OAuth token for methods that require authentication through OAuth.
+	 * Set the OAuth instance for methods that require authentication through 
+	 * OAuth.
 	 *
-	 * @param string $oauthToken
+	 * @param string $oauth
 	 */
-	public function setOauthToken($token)
+	public function setOauth($oauth)
 	{
-		$this->oauthToken = $token;
+		$this->oauth = $oauth;
 	}
 
 	/**
-	 * Get the OAuth token.
+	 * Get the OAuth instance.
 	 *
 	 * @return string
 	 */
-	public function getOauthToken()
+	public function getOauth()
 	{
-		return $this->oathToken;
+		return $this->oath;
 	}
 
 	/**
@@ -227,14 +242,34 @@ class Tumblr
 	 */
 	protected function handleGetMethod($info, $args)
 	{
-		// Handle authentication. TODO: handle oauth
-		$url = $this->prepareApiKeyUrl($info['uri'], $args[0]);
+		// Request the data according to the authentication method.
+		if ('apiKey' === $info['auth'])
+		{
+			$url = $this->prepareApiKeyUrl($info['uri'], $args[0]);
 
-		// Get data.
-		$curl = curl_init($url);
-		curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
-		$response = curl_exec($curl);
-		curl_close($curl);
+			// Get data.
+			$curl = curl_init($url);
+			curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+			$response = curl_exec($curl);
+			curl_close($curl);
+		}
+		else
+		{
+			$url = $this->prepareUrl($info['uri'], $args[0]);
+
+			// Get data.
+			try 
+			{
+				$this->oauth->fetch($url);
+				$response = $this->oauth->getLastResponse();
+			}
+			catch (OAuthException $ex)
+			{
+				throw new TumblrException(
+					'The Tumblr API responded with an authentication error: ' . $ex->getMessage()
+				);
+			}
+		}
 
 		$responseData = json_decode($response);
 
@@ -261,6 +296,22 @@ class Tumblr
 	}
 
 	/**
+	 * Prepare an url.
+	 * 
+	 * @param string $uri
+	 * @param string $blog
+	 */
+	protected function prepareUrl($uri, $blog)
+	{
+		$return = $this->getHost();
+
+		// Add blogname.
+		$return .= str_replace('%s', $blog, $uri);
+
+		return $return;
+	}
+
+	/**
 	 * Prepare an API key url.
 	 *
 	 * @param string $uri
@@ -268,10 +319,7 @@ class Tumblr
 	 */
 	protected function prepareApiKeyUrl($uri, $blog)
 	{
-		$return = $this->getHost();
-
-		// Add blogname.
-		$return .= str_replace('%s', $blog, $uri);
+		$return = $this->prepareUrl($uri, $blog);
 
 		// Add api key.
 		$apiKey = $this->getApiKey();

@@ -255,7 +255,7 @@ class Tumblr
 		}
 		else
 		{
-			$url = $this->prepareUrl($info['uri'], $args[0]);
+			$url = $this->prepareUrl($info['uri'], !empty($args) ? $args[0] : false);
 
 			// Get data.
 			try 
